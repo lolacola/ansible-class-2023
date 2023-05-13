@@ -1,0 +1,32 @@
+- hosts: master
+  tasks: 
+  - name: Install packages
+    yum:
+      name:
+        - httpd
+        - unzip
+        - wget
+      state: present
+  - name: Start service httpd, if not started
+    service:
+      name: httpd
+      state: started
+      enabled: yes
+
+
+- hosts: worker
+  tasks: 
+  - name: Install packages
+    yum:
+      name:
+        - git
+        - vim
+        - tree
+      state: present
+  - name: Remove repository (and clean up left-over metadata)
+    yum:
+      name: 
+        - vim
+        - tree
+      state: absent
+
