@@ -1,0 +1,34 @@
+- hosts: all
+  tasks: 
+  - name: Install httpd
+    yum:
+      name:
+        - httpd
+        - unzip
+      state: present
+#    notify: restart httpd
+  - name: Download wordpress
+    get_url:
+      url: https://wordpress.org/latest.zip
+      dest: /root
+  - name: Extract wordpress
+    unarchive:
+      src: /root/wordpress-6.2.zip
+      dest: /root
+      remote_src: yes
+  - name: Copy files
+    shell: rsync /root/wordpress/* /var/www/html/
+  - name: Change file ownership, group and permissions
+    file:
+      path: /root/var/www/
+      state: directory
+      recurse: yes
+      owner: apache
+      group: apache
+      mode: '0644'
+#  handlers:    
+  - name: restart httpd
+    service:
+      name: httpd
+      state: restarted 
+ 
