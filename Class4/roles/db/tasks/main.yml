@@ -1,0 +1,36 @@
+- name:
+  yum:
+    name:
+      - mariadb
+      - mariadb-server
+
+- name: Enable mariadb
+  service: 
+    name: mariadb
+    state: started
+    enabled: yes 
+
+# - name: Check database
+#   shell: mysql -e "USE wordpress1;"
+#   register: check_database
+#   ignore_errors: yes
+
+- name: Create database
+  shell: mysql -e "CREATE DATABASE "{{ db_name }}";"
+  # when: check_database.rc !=0
+
+# - name: Check user
+#   shell: mysql -e "SELECT USER FROM mysql.user WHERE user='lola1'"
+#   register: check_user
+#   ignore_errors: yes
+
+# - name: Create a user
+#   shell: mysql -e "CREATE USER 'lola1'@'localhost' IDENTIFIED BY 'kaizen';"
+#   when: check_user.rc !=0
+    
+
+- name: assign permissions
+  shell: mysql -e "GRANT ALL PRIVILEGES ON {{ db_name }}.* TO '{{ db_user }}'@'localhost' IDENTIFIED BY '{{ db_password }}';"
+
+- name: Flush PRIVILEGES
+  shell: mysql -e "FLUSH PRIVILEGES;"  
