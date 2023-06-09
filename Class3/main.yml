@@ -4,10 +4,10 @@
   tasks:
   - name: Install Apache
     include: apache.yml
-  # - name: Install packages
-  #   include: packages.yml
-  # - name: Install PHP
-  #   include: php.yml
+  - name: Install packages
+    include: packages.yml
+  - name: Install PHP
+    include: php.yml
   - name: Install wordpress
     include: wordpress.yml
   - name: Install DB
